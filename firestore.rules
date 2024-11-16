@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      function isOwner() {
+        return isSignedIn() && request.auth.uid == userId;
+      }
+
+      // Allow users to read and write their own document
+      allow read, write: if isOwner();
+
+      // Tasks subcollection rules
+      match /tasks/{taskId} {
+        function isValidTask() {
+          let task = request.resource.data;
+          return task.title is string &&
+                 task.title.size() <= 100 &&
+                 task.time is string &&
+                 task.completed is bool &&
+                 task.date is string &&
+                 task.isRecurring is bool;
+        }
+
+        allow read: if isOwner();
+        allow create: if isOwner() && isValidTask();
+        allow update: if isOwner() && isValidTask();
+        allow delete: if isOwner();
+      }
+    }
+  }
+}
