@@ -8,4 +8,5 @@ export interface Task {
   isRecurring: boolean;
   createdAt?: Date | null;
   updatedAt?: Date | null;
+  lastCompletedDate?: string | null;
 }

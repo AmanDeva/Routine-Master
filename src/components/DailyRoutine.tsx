@@ -16,7 +16,6 @@ export default function DailyRoutine() {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const auth = useAuth();
 
-  // Initialize alarm system
   const { activeAlarms, stopAlarm, stopAllAlarms } = useAlarms(tasks);
 
   useEffect(() => {
@@ -33,7 +32,6 @@ export default function DailyRoutine() {
         const today = new Date().toISOString().split('T')[0];
         const loadedTasks = await getTasks(today);
         if (mounted) {
-          // Sort tasks by time
           const sortedTasks = loadedTasks.sort((a, b) => a.time.localeCompare(b.time));
           setTasks(sortedTasks);
         }
@@ -51,6 +49,18 @@ export default function DailyRoutine() {
 
     if (auth?.currentUser) {
       fetchTasks();
+      // Refresh tasks at midnight
+      const now = new Date();
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+      
+      const midnightTimeout = setTimeout(() => {
+        fetchTasks();
+      }, timeUntilMidnight);
+
+      return () => {
+        clearTimeout(midnightTimeout);
+      };
     }
 
     return () => {
@@ -69,10 +79,19 @@ export default function DailyRoutine() {
       const { id, userId, ...updateData } = task;
       await updateTask(task.id, updateData);
       
-      setTasks(prevTasks => 
-        prevTasks.map(t => t.id === task.id ? { ...t, ...updateData } : t)
-          .sort((a, b) => a.time.localeCompare(b.time))
-      );
+      if (task.completed && !task.isRecurring) {
+        // Remove completed one-time tasks from the list
+        setTasks(prevTasks => 
+          prevTasks.filter(t => t.id !== task.id)
+            .sort((a, b) => a.time.localeCompare(b.time))
+        );
+      } else {
+        setTasks(prevTasks => 
+          prevTasks.map(t => t.id === task.id ? { ...t, ...updateData } : t)
+            .sort((a, b) => a.time.localeCompare(b.time))
+        );
+      }
+      
       setEditingTask(null);
       toast.success('Task updated successfully');
     } catch (error) {
@@ -84,9 +103,14 @@ export default function DailyRoutine() {
   async function handleToggleTask(task: Task) {
     const updatedTask = { ...task, completed: !task.completed };
     try {
-      setTasks(prevTasks =>
-        prevTasks.map(t => t.id === task.id ? updatedTask : t)
-      );
+      if (updatedTask.completed && !task.isRecurring) {
+        // Remove completed one-time tasks immediately
+        setTasks(prevTasks => prevTasks.filter(t => t.id !== task.id));
+      } else {
+        setTasks(prevTasks =>
+          prevTasks.map(t => t.id === task.id ? updatedTask : t)
+        );
+      }
       
       if (updatedTask.completed) {
         stopAlarm(task.id);
@@ -137,8 +161,8 @@ export default function DailyRoutine() {
       <Navigation onNewTask={() => setShowTaskForm(true)} />
       
       {showTaskForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg w-full max-w-md">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="dark-card w-full max-w-md rounded-lg">
             <div className="p-6">
               <TaskForm 
                 onTaskAdded={handleTaskAdded}
@@ -149,8 +173,8 @@ export default function DailyRoutine() {
         </div>
       )}
       
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Today's Tasks</h2>
+      <div className="glass-effect p-6 rounded-lg">
+        <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">Today's Tasks</h2>
         <TaskList
           tasks={tasks}
           loading={loading}
@@ -164,15 +188,15 @@ export default function DailyRoutine() {
 
       {activeAlarms.length > 0 && (
         <div className="fixed bottom-4 right-4 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-4 space-y-4">
+          <div className="dark-panel rounded-lg shadow-lg p-4 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-red-600 flex items-center gap-2">
+              <h3 className="font-semibold text-red-400 flex items-center gap-2">
                 <Bell className="h-5 w-5 animate-pulse" />
                 Active Alarms
               </h3>
               <button
                 onClick={stopAllAlarms}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-400 hover:text-gray-200"
                 title="Stop all alarms"
               >
                 <BellOff className="h-5 w-5" />
@@ -181,10 +205,10 @@ export default function DailyRoutine() {
             <div className="space-y-2">
               {activeAlarms.map(alarm => (
                 <div key={alarm.taskId} className="flex items-center justify-between gap-4">
-                  <span className="text-sm">{alarm.title}</span>
+                  <span className="text-sm text-gray-200">{alarm.title}</span>
                   <button
                     onClick={() => stopAlarm(alarm.taskId)}
-                    className="px-2 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200"
+                    className="px-2 py-1 text-sm bg-red-900/50 text-red-300 rounded hover:bg-red-800/50"
                   >
                     Stop
                   </button>

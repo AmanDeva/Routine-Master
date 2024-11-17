@@ -21,7 +21,7 @@ service cloud.firestore {
                  task.title.size() <= 100 &&
                  task.time is string &&
                  task.completed is bool &&
-                 task.date is string &&
+                 (task.date is string || !('date' in task)) &&
                  task.isRecurring is bool;
         }
 
