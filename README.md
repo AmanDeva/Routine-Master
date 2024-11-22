@@ -24,13 +24,12 @@ A productivity application designed to help users manage their daily routines an
 ### 3. **One-Time Task Management**  
    - Add tasks that need to be completed on a specific date and time.  
    - Tasks are displayed on an interactive calendar for easy visualization.  
-   - Users can view past, present, and future tasks on the calendar.
+   - Users can view  present and future tasks on the calendar.
 
 ---
 
 ### 4. **Alarm Functionality**  
-   - Alarms can be set for both daily routines and one-time tasks.  
-   - Notifications are sent via Firebase Cloud Messaging (FCM).  
+   - Alarms can be set for both daily routines and one-time tasks.    
    - Customizable alarm tones and snooze options.
 
 ---
