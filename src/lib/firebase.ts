@@ -17,11 +17,6 @@ import {
   getDoc,
   where,
   enableIndexedDbPersistence,
-  Timestamp,
-  onSnapshot,
-  QueryConstraint,
-  startOfDay,
-  endOfDay
 } from 'firebase/firestore';
 import { Task } from '../types';
 
@@ -34,6 +29,7 @@ const firebaseConfig = {
   appId: "1:813159736212:web:019faf13d8b09d9ee8e581"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
@@ -154,7 +150,6 @@ export async function updateTask(taskId: string, taskData: Partial<Task>): Promi
       updatedAt: serverTimestamp()
     };
 
-    // If task is being marked as completed, store the completion date
     if (taskData.completed) {
       updateData.lastCompletedDate = new Date().toISOString().split('T')[0];
     }
@@ -207,7 +202,7 @@ export async function getTasks(date: string): Promise<Task[]> {
           where('isRecurring', '==', false),
           where('date', '>=', startDate),
           where('date', '<', endDate),
-          where('completed', '==', false), // Only show uncompleted one-time tasks
+          where('completed', '==', false),
           orderBy('date'),
           orderBy('time')
         );
@@ -262,7 +257,7 @@ export async function getTasks(date: string): Promise<Task[]> {
         tasksRef,
         where('isRecurring', '==', false),
         where('date', '==', date),
-        where('completed', '==', false), // Only show uncompleted one-time tasks
+        where('completed', '==', false),
         orderBy('time')
       );
 

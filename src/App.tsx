@@ -5,6 +5,8 @@ import { AlarmProvider } from './contexts/AlarmContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import AuthForm from './components/AuthForm';
 import ProfilePage from './components/ProfilePage';
+import PoliciesPage from './components/PoliciesPage';
+import SubscriptionPage from './components/SubscriptionPage';
 import DailyRoutine from './components/DailyRoutine';
 import Navigation from './components/Navigation';
 import { Toaster } from 'react-hot-toast';
@@ -57,6 +59,12 @@ export default function App() {
                     <ProfilePage />
                   </PrivateRoute>
                 } />
+                <Route path="/subscription" element={
+                  <PrivateRoute>
+                    <SubscriptionPage />
+                  </PrivateRoute>
+                } />
+                <Route path="/policies" element={<PoliciesPage />} />
                 <Route path="/" element={
                   <PrivateRoute>
                     <Dashboard />

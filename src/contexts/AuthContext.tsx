@@ -9,11 +9,13 @@ import {
   updateEmail
 } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+import { signInWithGooglePopup } from '../lib/auth';
 
 interface AuthContextType {
   currentUser: User | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, username: string) => Promise<void>;
+  loginWithGoogle: () => Promise<User | null>;
   logout: () => Promise<void>;
   updateUserProfile: (username: string) => Promise<void>;
   updateUserPassword: (newPassword: string) => Promise<void>;
@@ -37,6 +39,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function login(email: string, password: string) {
     await signInWithEmailAndPassword(auth, email, password);
+  }
+
+  async function loginWithGoogle() {
+    return await signInWithGooglePopup();
   }
 
   async function logout() {
@@ -71,6 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     currentUser,
     login,
     signup,
+    loginWithGoogle,
     logout,
     updateUserProfile,
     updateUserPassword,

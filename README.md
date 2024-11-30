@@ -64,3 +64,11 @@ src/
 │   └── notificationHelper.js
 ├── App.js
 ├── index.js
+```
+
+## **Developer Contact Information**
+
+- **Phone Number**: +91 9026425459  
+- **Email**: devaaman8@gmail.com  
+- **Address**: Rafiganj, Aurangabad, Bihar 824125  
+- **Business Hours**: Monday to Friday, 10:00 AM to 6:00 PM IST

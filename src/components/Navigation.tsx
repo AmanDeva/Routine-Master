@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Calendar, Plus, LogOut, Settings, User, Bell, BellOff } from 'lucide-react';
+import { Menu, X, Calendar, Plus, LogOut, Settings, User, Bell, BellOff, Shield, CreditCard } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useAlarmSettings } from '../contexts/AlarmContext';
@@ -189,12 +189,30 @@ export default function Navigation({ onNewTask }: NavigationProps) {
             </motion.button>
 
             <Link
+              to="/subscription"
+              className={menuItemClass}
+              onClick={() => setIsOpen(false)}
+            >
+              <CreditCard className={menuIconClass} />
+              Subscription
+            </Link>
+
+            <Link
               to="/profile"
               className={menuItemClass}
               onClick={() => setIsOpen(false)}
             >
               <Settings className={`${menuIconClass} group-hover:rotate-90 transition-transform duration-300`} />
               Profile Settings
+            </Link>
+
+            <Link
+              to="/policies"
+              className={menuItemClass}
+              onClick={() => setIsOpen(false)}
+            >
+              <Shield className={menuIconClass} />
+              Policies & Terms
             </Link>
 
             <motion.button

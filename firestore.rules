@@ -10,6 +10,22 @@ service cloud.firestore {
         return isSignedIn() && request.auth.uid == userId;
       }
 
+      function isValidSubscription() {
+        let subscription = request.resource.data;
+        return subscription.isActive is bool &&
+               subscription.subscriptionType is string &&
+               subscription.amount is number &&
+               subscription.currency is string;
+      }
+
+      function isValidPayment() {
+        let payment = request.resource.data;
+        return payment.amount is number &&
+               payment.currency is string &&
+               payment.paymentId is string &&
+               payment.status is string;
+      }
+
       // Allow users to read and write their own document
       allow read, write: if isOwner();
 
@@ -29,6 +45,19 @@ service cloud.firestore {
         allow create: if isOwner() && isValidTask();
         allow update: if isOwner() && isValidTask();
         allow delete: if isOwner();
+      }
+
+      // Subscription subcollection rules
+      match /subscription/{document=**} {
+        allow read: if isOwner();
+        allow create, update: if isOwner() && isValidSubscription();
+        allow delete: if isOwner();
+      }
+
+      // Payments subcollection rules
+      match /payments/{document=**} {
+        allow read: if isOwner();
+        allow create: if isOwner() && isValidPayment();
       }
     }
   }
