@@ -25,7 +25,7 @@ export default function IntroductionPage() {
     {
       icon: <CheckCircle className="h-6 w-6 text-accent-teal" />,
       title: "User Authentication",
-      description: "Secure sign-in with email/password using Firebase Authentication. Future versions will support OAuth for Google or Facebook."
+      description: "Secure sign-in with email/password using Firebase Authentication. Also support OAuth for Google or Facebook."
     }
   ];
 
