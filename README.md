@@ -10,7 +10,7 @@ A productivity application designed to help users manage their daily routines an
    - **Sign In/Sign Up**:  
      Users can create an account or log in to an existing one using secure authentication.  
      - Firebase Authentication for email/password login.
-     - OAuth support (e.g., Google or Facebook login) can be integrated in future versions.
+     - OAuth support , Google.
 
 ---
 
