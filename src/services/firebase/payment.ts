@@ -7,7 +7,8 @@ import { User } from 'firebase/auth';
 import { db } from './db';
 import { getSubscriptionStatus } from './subscription';
 
-const RAZORPAY_KEY_ID = 'VV6e4Rn71GItuKNOGSawMaXq';
+// Test mode key - this should be replaced with production key in production
+const RAZORPAY_KEY_ID = 'rzp_test_YyQVSGLKXP9zXK';
 
 interface PaymentOptions {
   amount: number;
@@ -38,7 +39,10 @@ export async function loadRazorpayScript(): Promise<boolean> {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
+    script.onerror = () => {
+      console.error('Failed to load Razorpay script');
+      resolve(false);
+    };
     document.body.appendChild(script);
   });
 }
@@ -56,10 +60,10 @@ export async function initializePayment(user: User): Promise<void> {
 
   const isLoaded = await loadRazorpayScript();
   if (!isLoaded) {
-    throw new Error('Failed to load Razorpay SDK');
+    throw new Error('Failed to load Razorpay SDK. Please check your internet connection and try again.');
   }
 
-  const amount = 700; // Rs. 7 in paise
+  const amount = 700; // Rs. 7 in paise (Razorpay expects amount in paise)
   const options: PaymentOptions = {
     amount,
     currency: 'INR',
@@ -75,20 +79,35 @@ export async function initializePayment(user: User): Promise<void> {
     },
     modal: {
       ondismiss: () => {
-        console.log('Payment cancelled');
+        console.log('Payment cancelled by user');
       }
     }
   };
 
-  const rzp = new window.Razorpay({
-    key: RAZORPAY_KEY_ID,
-    ...options,
-    handler: async (response: any) => {
-      await handlePaymentSuccess(user.uid, response);
-    },
-  });
+  try {
+    const rzp = new window.Razorpay({
+      key: RAZORPAY_KEY_ID,
+      ...options,
+      handler: async (response: any) => {
+        try {
+          await handlePaymentSuccess(user.uid, response);
+        } catch (error) {
+          console.error('Payment success handler error:', error);
+          throw new Error('Failed to process payment confirmation');
+        }
+      },
+    });
 
-  rzp.open();
+    rzp.on('payment.failed', function (response: any) {
+      console.error('Payment failed:', response.error);
+      throw new Error(response.error.description || 'Payment failed');
+    });
+
+    rzp.open();
+  } catch (error) {
+    console.error('Razorpay initialization error:', error);
+    throw new Error('Failed to initialize payment. Please try again.');
+  }
 }
 
 async function handlePaymentSuccess(userId: string, response: any): Promise<void> {
@@ -107,7 +126,7 @@ async function handlePaymentSuccess(userId: string, response: any): Promise<void
       currentPeriodEnd: nextPeriodEnd,
       cancelAtPeriodEnd: false,
       lastPaymentId: response.razorpay_payment_id,
-      amount: 700,
+      amount: 700, // Keep amount in paise for consistency
       currency: 'INR',
       updatedAt: serverTimestamp()
     }, { merge: true });
@@ -115,7 +134,7 @@ async function handlePaymentSuccess(userId: string, response: any): Promise<void
     // Record payment
     const paymentRef = doc(db, 'users', userId, 'payments', response.razorpay_payment_id);
     await setDoc(paymentRef, {
-      amount: 700,
+      amount: 700, // Keep amount in paise for consistency
       currency: 'INR',
       paymentId: response.razorpay_payment_id,
       orderId: response.razorpay_order_id,
