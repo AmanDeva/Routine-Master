@@ -75,7 +75,7 @@ src/
 
 # **License**
 
-## Copyright (C) Aman Deva 2024. All Rights Reserved.
+## Copyright © Aman Deva 2024. All Rights Reserved.
 
 This repository and its content are the proprietary property of Aman Deva. Unauthorized use, reproduction, or distribution of the content is strictly prohibited without prior written permission.
 
