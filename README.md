@@ -66,12 +66,6 @@ src/
 ├── index.js
 ```
 
-## **Developer Contact Information**
-
-- **Phone Number**: +91 9026425459  
-- **Email**: devaaman8@gmail.com  
-- **Address**: Rafiganj, Aurangabad, Bihar 824125  
-- **Business Hours**: Monday to Friday, 10:00 AM to 6:00 PM IST
 
 # **License**
 
@@ -83,11 +77,6 @@ This repository and its content are the proprietary property of Aman Deva. Unaut
 - The content in this repository is provided for personal viewing only.
 - Copying, modifying, publishing, or redistributing any files from this repository is prohibited without explicit authorization.
 - Commercial use of this repository or its content is strictly forbidden.
-
-### **Permissions**
-For permissions or inquiries, contact:  
-**Email**: devaaman8@gmail.com  
-**Phone**: +91 9026425459
 
 ---
 
