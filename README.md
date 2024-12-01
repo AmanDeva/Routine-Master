@@ -73,7 +73,7 @@ src/
 - **Address**: Rafiganj, Aurangabad, Bihar 824125  
 - **Business Hours**: Monday to Friday, 10:00 AM to 6:00 PM IST
 
-  # **License**
+# **License**
 
 ## Copyright (C) Aman Deva 2024. All Rights Reserved.
 
