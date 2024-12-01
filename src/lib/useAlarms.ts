@@ -63,7 +63,6 @@ export function useAlarms(tasks: Task[]) {
       audioRef.current = new AudioContext();
     }
 
-    // Check if alarm is already active for this task
     if (activeAlarms.some(alarm => alarm.taskId === task.id)) {
       return;
     }
@@ -83,14 +82,12 @@ export function useAlarms(tasks: Task[]) {
     oscillatorRef.current = oscillator;
     gainNodeRef.current = gainNode;
 
-    // Create beeping pattern
     const intervalId = window.setInterval(() => {
       const currentTime = audioRef.current!.currentTime;
       gainNode.gain.setValueAtTime(1, currentTime);
       gainNode.gain.setValueAtTime(0, currentTime + 0.1);
     }, 200);
 
-    // Add to active alarms
     setActiveAlarms(prev => [...prev, {
       taskId: task.id,
       title: task.title,
@@ -98,7 +95,6 @@ export function useAlarms(tasks: Task[]) {
       startTime: Date.now()
     }]);
 
-    // Auto-stop after 2 minutes
     setTimeout(() => {
       stopAlarm(task.id);
     }, 120000); // 2 minutes in milliseconds
@@ -145,10 +141,20 @@ export function useAlarms(tasks: Task[]) {
       });
     };
 
-    const interval = setInterval(checkTasks, 60000);
-    checkTasks();
+    const syncInterval = () => {
+      const now = Date.now();
+      const nextMinute = Math.ceil(now / 60000) * 60000;
+      const timeout = nextMinute - now;
 
-    return () => clearInterval(interval);
+      setTimeout(() => {
+        checkTasks();
+        setInterval(checkTasks, 60000); // Regular check every minute
+      }, timeout);
+    };
+
+    syncInterval();
+
+    return () => clearInterval();
   }, [tasks, alarmsEnabled]);
 
   return { activeAlarms, stopAlarm, stopAllAlarms };
