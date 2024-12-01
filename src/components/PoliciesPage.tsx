@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 
 export default function PoliciesPage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-auto">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 
