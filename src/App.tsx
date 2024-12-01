@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { AlarmProvider } from './contexts/AlarmContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import IntroductionPage from './components/IntroductionPage';
 import AuthForm from './components/AuthForm';
 import ProfilePage from './components/ProfilePage';
 import PoliciesPage from './components/PoliciesPage';
 import SubscriptionPage from './components/SubscriptionPage';
 import DailyRoutine from './components/DailyRoutine';
-import Navigation from './components/Navigation';
 import { Toaster } from 'react-hot-toast';
 
 function Dashboard() {
@@ -34,7 +34,7 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const auth = useAuth();
-  return !auth?.currentUser ? <>{children}</> : <Navigate to="/" />;
+  return !auth?.currentUser ? <>{children}</> : <Navigate to="/dashboard" />;
 }
 
 export default function App() {
@@ -47,12 +47,22 @@ export default function App() {
                           dark:from-gray-900 dark:to-gray-800 
                           text-gray-900 dark:text-gray-100 transition-colors duration-300">
               <Routes>
+                <Route path="/" element={
+                  <PublicRoute>
+                    <IntroductionPage />
+                  </PublicRoute>
+                } />
                 <Route path="/auth" element={
                   <PublicRoute>
                     <div className="min-h-screen flex items-center justify-center p-4">
                       <AuthForm />
                     </div>
                   </PublicRoute>
+                } />
+                <Route path="/dashboard" element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
                 } />
                 <Route path="/profile" element={
                   <PrivateRoute>
@@ -65,11 +75,8 @@ export default function App() {
                   </PrivateRoute>
                 } />
                 <Route path="/policies" element={<PoliciesPage />} />
-                <Route path="/" element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                } />
+                {/* Redirect any unknown route to / */}
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </div>
             <Toaster 
