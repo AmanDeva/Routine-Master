@@ -1,7 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, Bell, CheckCircle, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, Bell, CheckCircle2, ArrowRight, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function IntroductionPage() {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function IntroductionPage() {
       description: "Set alarms for both routines and one-time tasks. Enjoy customizable tones and snooze options to match your preferences."
     },
     {
-      icon: <CheckCircle className="h-6 w-6 text-accent-teal" />,
+      icon: <CheckCircle2 className="h-6 w-6 text-accent-teal" />,
       title: "User Authentication",
       description: "Secure sign-in with email/password using Firebase Authentication. Also support OAuth for Google."
     }
@@ -120,6 +120,104 @@ export default function IntroductionPage() {
             </p>
           </div>
         </div>
+
+        <footer className="mt-24 border-t border-gray-200 dark:border-gray-700 pt-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Company</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/policies" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/policies" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    Terms & Conditions
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/policies" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    Privacy Policy
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Products & Services</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/pricing" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    Pricing & Products
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/shipping" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    Shipping and Delivery
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/cancellation" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    Cancellation and Refund
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Support</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/policies" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/policies" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    FAQs
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/policies" className="text-gray-600 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    Contact Support
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Contact Information</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <Mail className="h-5 w-5 text-primary-500 mt-0.5" />
+                  <span className="text-gray-600 dark:text-gray-400">
+                    devaaman8@gmail.com
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Phone className="h-5 w-5 text-primary-500 mt-0.5" />
+                  <span className="text-gray-600 dark:text-gray-400">
+                    +91 9026425459
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <MapPin className="h-5 w-5 text-primary-500 mt-0.5" />
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Rafiganj, Aurangabad<br />
+                    Bihar 824125
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-8 pb-4">
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+              © {new Date().getFullYear()} Routine Master. All rights reserved.
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );

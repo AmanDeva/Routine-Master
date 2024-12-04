@@ -9,6 +9,9 @@ import ProfilePage from './components/ProfilePage';
 import PoliciesPage from './components/PoliciesPage';
 import SubscriptionPage from './components/SubscriptionPage';
 import DailyRoutine from './components/DailyRoutine';
+import PricingPage from './pages/PricingPage';
+import ShippingPage from './pages/ShippingPage';
+import CancellationPage from './pages/CancellationPage';
 import { Toaster } from 'react-hot-toast';
 
 function Dashboard() {
@@ -75,6 +78,9 @@ export default function App() {
                   </PrivateRoute>
                 } />
                 <Route path="/policies" element={<PoliciesPage />} />
+                <Route path="/pricing" element={<PricingPage />} />
+                <Route path="/shipping" element={<ShippingPage />} />
+                <Route path="/cancellation" element={<CancellationPage />} />
                 {/* Redirect any unknown route to / */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
