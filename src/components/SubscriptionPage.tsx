@@ -39,6 +39,7 @@ export default function SubscriptionPage() {
     setProcessingPayment(true);
     try {
       await initializePayment(auth.currentUser);
+      toast.success('Payment initiated');
     } catch (error) {
       console.error('Payment error:', error);
       toast.error(error instanceof Error ? error.message : 'Payment failed');

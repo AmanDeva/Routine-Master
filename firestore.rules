@@ -13,9 +13,12 @@ service cloud.firestore {
       function isValidSubscription() {
         let subscription = request.resource.data;
         return subscription.isActive is bool &&
-               subscription.subscriptionType is string &&
+               subscription.currentPeriodEnd is timestamp &&
+               subscription.cancelAtPeriodEnd is bool &&
+               (subscription.lastPaymentId is string || !('lastPaymentId' in subscription)) &&
                subscription.amount is number &&
-               subscription.currency is string;
+               subscription.currency is string &&
+               subscription.updatedAt is timestamp;
       }
 
       function isValidPayment() {
@@ -23,7 +26,21 @@ service cloud.firestore {
         return payment.amount is number &&
                payment.currency is string &&
                payment.paymentId is string &&
-               payment.status is string;
+               payment.orderId is string &&
+               payment.status is string &&
+               payment.type is string &&
+               payment.period is string &&
+               payment.createdAt is timestamp;
+      }
+
+      function isValidOrder() {
+        let order = request.resource.data;
+        return order.amount is number &&
+               order.currency is string &&
+               order.status in ['created', 'completed', 'failed'] &&
+               order.createdAt is timestamp &&
+               (!('completedAt' in order) || order.completedAt is timestamp) &&
+               (!('paymentId' in order) || order.paymentId is string);
       }
 
       // Allow users to read and write their own document
@@ -54,10 +71,20 @@ service cloud.firestore {
         allow delete: if isOwner();
       }
 
+      // Orders subcollection rules
+      match /orders/{orderId} {
+        allow read: if isOwner();
+        allow create: if isOwner() && isValidOrder();
+        allow update: if isOwner() && isValidOrder();
+        allow delete: if false; // Never allow order deletion
+      }
+
       // Payments subcollection rules
-      match /payments/{document=**} {
+      match /payments/{paymentId} {
         allow read: if isOwner();
         allow create: if isOwner() && isValidPayment();
+        allow update: if false; // Never allow payment modification
+        allow delete: if false; // Never allow payment deletion
       }
     }
   }
