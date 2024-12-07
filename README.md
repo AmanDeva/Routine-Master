@@ -66,19 +66,3 @@ src/
 ├── index.js
 ```
 
-
-# **License**
-
-## Copyright © Aman Deva 2024. All Rights Reserved.
-
-This repository and its content are the proprietary property of Aman Deva. Unauthorized use, reproduction, or distribution of the content is strictly prohibited without prior written permission.
-
-### **Terms of Use**
-- The content in this repository is provided for personal viewing only.
-- Copying, modifying, publishing, or redistributing any files from this repository is prohibited without explicit authorization.
-- Commercial use of this repository or its content is strictly forbidden.
-
----
-
-### Disclaimer
-This software is provided "as is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the author be liable for any claim, damages, or other liability.
